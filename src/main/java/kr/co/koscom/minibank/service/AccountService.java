@@ -3,6 +3,7 @@ package kr.co.koscom.minibank.service;
 import kr.co.koscom.minibank.domain.Account;
 import kr.co.koscom.minibank.dto.AccountCreateRequestDto;
 import kr.co.koscom.minibank.dto.AccountResponseDto;
+import kr.co.koscom.minibank.exception.NotFoundException;
 import kr.co.koscom.minibank.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,7 @@ public class AccountService {
     }
 
     public AccountResponseDto getById(Long id) {
-        Account account = accountRepository.findById(id).orElseThrow(RuntimeException::new);
+        Account account = accountRepository.findById(id).orElseThrow(NotFoundException::new);
         return AccountResponseDto.from(account);
     }
     private String generateAccountNumber() {
