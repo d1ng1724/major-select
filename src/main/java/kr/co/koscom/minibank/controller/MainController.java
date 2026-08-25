@@ -9,16 +9,6 @@ import java.util.List;
 
 @RestController
 public class MainController {
-    @GetMapping("/")
-    public String hello() {
-        return "hello";
-    }
-
-    @GetMapping("/koscom")
-    public String koscom() {
-        return "koscom";
-    }
-
     @GetMapping("/books")
     public List<Book> books() {
         List<Book> books = new ArrayList<>();
