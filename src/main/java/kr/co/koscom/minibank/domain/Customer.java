@@ -33,6 +33,5 @@ public class Customer {
 
     public void addAccount(Account account) {
         this.accounts.add(account);
-
     }
 }
