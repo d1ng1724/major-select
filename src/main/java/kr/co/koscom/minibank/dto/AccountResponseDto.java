@@ -22,13 +22,12 @@ public class AccountResponseDto {
     private LocalDateTime openedAt;
 
     public static AccountResponseDto from(Account account) {
-        AccountResponseDto dto = AccountResponseDto.builder()
+        return AccountResponseDto.builder()
                 .id(account.getId())
-                .ownerName(account.getOwnerName())
+                .ownerName(account.getCustomer().getName())
                 .accountNumber(account.getAccountNumber())
                 .balance(account.getBalance())
                 .openedAt(account.getOpenedAt())
                 .build();
-        return dto;
     }
 }

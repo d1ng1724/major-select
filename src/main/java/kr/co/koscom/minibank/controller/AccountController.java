@@ -1,6 +1,7 @@
 package kr.co.koscom.minibank.controller;
 
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import kr.co.koscom.minibank.dto.AccountCreateRequestDto;
 import kr.co.koscom.minibank.dto.AccountResponseDto;
 import kr.co.koscom.minibank.service.AccountService;
@@ -19,19 +20,25 @@ public class AccountController {
 
     @PostMapping("")
     public ResponseEntity<AccountResponseDto> createAccount(@Valid @RequestBody AccountCreateRequestDto accountCreateRequestDto) {
-        AccountResponseDto dto = accountService.createAccount(accountCreateRequestDto);
-        return ResponseEntity.ok(dto);
+        AccountResponseDto result = accountService.createAccount(accountCreateRequestDto);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("")
     public ResponseEntity<List<AccountResponseDto>> getAll() {
-        List<AccountResponseDto> dtos = accountService.getAll();
-        return ResponseEntity.ok(dtos);
+        List<AccountResponseDto> result = accountService.getAll();
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AccountResponseDto> getAccountById(@PathVariable Long id) {
-        AccountResponseDto dto = accountService.getById(id);
-        return ResponseEntity.ok(dto);
+        AccountResponseDto result = accountService.getById(id);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/customers/{id}")
+    public ResponseEntity<List<AccountResponseDto>> getAccountByCustomerId(@PathVariable Long id) {
+        List<AccountResponseDto> result = accountService.getByCustomerId(id);
+        return ResponseEntity.ok(result);
     }
 }
