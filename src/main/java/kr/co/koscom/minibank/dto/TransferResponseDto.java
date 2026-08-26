@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransferResponseDto {
-    AccountBalanceDetailDto fromAccount;
-    AccountBalanceDetailDto toAccount;
+    TransactionHistoryResponseDto fromHistory;
+    TransactionHistoryResponseDto toHistory;
     LocalDateTime transferredAt;
-
 }
