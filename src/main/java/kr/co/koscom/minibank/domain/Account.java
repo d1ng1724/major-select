@@ -30,6 +30,10 @@ public class Account {
     @Version
     private Long version;
 
+    @Column(nullable = false, precision = 15, scale = 2)
+    @Builder.Default
+    private BigDecimal dailyLimit = new BigDecimal("3000000");
+
     void assignCustomer(Customer customer) {
         this.customer = customer;
     }
@@ -43,5 +47,12 @@ public class Account {
 
     public void deposit(BigDecimal amount) {
         this.balance = this.balance.add(amount);
+    }
+
+    public void changeDailyLimit(BigDecimal newDailyLimit) {
+        if (newDailyLimit.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("이체한도는 0보다 커야 합니다.");
+        }
+        this.dailyLimit = newDailyLimit;
     }
 }

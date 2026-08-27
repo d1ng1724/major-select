@@ -1,10 +1,12 @@
 package kr.co.koscom.minibank.repository;
 
 import kr.co.koscom.minibank.domain.TransactionHistory;
+import kr.co.koscom.minibank.domain.TransactionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -15,4 +17,8 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
             "WHERE a.id = :accountId " +
             "ORDER BY t.transactedAt DESC")
     List<TransactionHistory> findByAccountIdOrderByTransactedAtDesc(Long accountId);
+
+
+    List<TransactionHistory> findByAccountIdAndTypeAndTransactedAtBetween(
+            Long accountId, TransactionType type, LocalDateTime start, LocalDateTime end);
 }

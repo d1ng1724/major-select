@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
@@ -67,6 +68,12 @@ public class AccountService {
     public AccountResponseDto getByAccountNumber(String accountNumber) {
         Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(NotFoundException::new);
         return AccountResponseDto.from(account);
+    }
+
+    @Transactional
+    public void updateDailyLimit(Long accountId, BigDecimal newLimit) {
+        Account account = accountRepository.findById(accountId).orElseThrow(NotFoundException::new);
+        account.changeDailyLimit(newLimit);
     }
 
     private String generateAccountNumber() {

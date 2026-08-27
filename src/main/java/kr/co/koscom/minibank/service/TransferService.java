@@ -6,6 +6,7 @@ import kr.co.koscom.minibank.domain.TransactionType;
 import kr.co.koscom.minibank.dto.TransactionHistoryResponseDto;
 import kr.co.koscom.minibank.dto.TransferRequestDto;
 import kr.co.koscom.minibank.dto.TransferResponseDto;
+import kr.co.koscom.minibank.exception.DailyLimitExceededException;
 import kr.co.koscom.minibank.exception.NotFoundException;
 import kr.co.koscom.minibank.repository.AccountRepository;
 import kr.co.koscom.minibank.repository.TransactionHistoryRepository;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,6 +32,8 @@ public class TransferService {
                 .orElseThrow(NotFoundException::new);
         Account toAccount = accountRepository.findByAccountNumber(dto.getToAccountNumber())
                 .orElseThrow(NotFoundException::new);
+
+        validateDailyLimit(fromAccount.getId(), dto.getAmount());
 
         fromAccount.withdraw(dto.getAmount());
         toAccount.deposit(dto.getAmount());
@@ -63,5 +68,35 @@ public class TransferService {
     public List<TransactionHistoryResponseDto> getHistoriesByAccountId(Long id) {
         List<TransactionHistory> histories = transactionHistoryRepository.findByAccountIdOrderByTransactedAtDesc(id);
         return histories.stream().map(TransactionHistoryResponseDto::from).toList();
+    }
+
+    public BigDecimal getUsedAmount(Long accountId) {
+        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        return transactionHistoryRepository
+                .findByAccountIdAndTypeAndTransactedAtBetween(accountId, TransactionType.WITHDRAW, startOfDay, endOfDay)
+                .stream()
+                .map(TransactionHistory::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private void validateDailyLimit(Long accountId, BigDecimal amount) {
+        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        Account account = accountRepository.findById(accountId).orElseThrow(NotFoundException::new);
+
+        BigDecimal usedToday = transactionHistoryRepository
+                .findByAccountIdAndTypeAndTransactedAtBetween(accountId, TransactionType.WITHDRAW, startOfDay, endOfDay)
+                .stream()
+                .map(TransactionHistory::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal afterThisTransfer = usedToday.add(amount);
+        if (afterThisTransfer.compareTo(account.getDailyLimit()) > 0) {
+            throw new DailyLimitExceededException(account.getAccountNumber(),
+                    account.getDailyLimit().toString(), usedToday.toString());
+        }
     }
 }

@@ -20,6 +20,7 @@ public class AccountResponseDto {
     private String ownerName;
     private BigDecimal balance;
     private LocalDateTime openedAt;
+    private BigDecimal dailyLimit;
 
     public static AccountResponseDto from(Account account) {
         return AccountResponseDto.builder()
@@ -28,6 +29,7 @@ public class AccountResponseDto {
                 .accountNumber(account.getAccountNumber())
                 .balance(account.getBalance())
                 .openedAt(account.getOpenedAt())
+                .dailyLimit(account.getDailyLimit())
                 .build();
     }
 }
