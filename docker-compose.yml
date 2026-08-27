@@ -12,3 +12,14 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+
+  app:
+    build: .
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/minibank
+      SPRING_DATASOURCE_USERNAME: minibank
+      SPRING_DATASOURCE_PASSWORD: minibank1234!
+    ports:
+      - "8080:8080"

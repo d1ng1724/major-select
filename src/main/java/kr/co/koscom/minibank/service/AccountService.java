@@ -45,21 +45,25 @@ public class AccountService {
         return AccountResponseDto.from(savedAccount);
     }
 
+    @Transactional(readOnly = true)
     public List<AccountResponseDto> getAll() {
-        List<Account> accounts = accountRepository.findAll();
+        List<Account> accounts = accountRepository.findAllWithCustomer();
         return accounts.stream().map(AccountResponseDto::from).toList();
     }
 
+    @Transactional(readOnly = true)
     public AccountResponseDto getById(Long id) {
         Account account = accountRepository.findById(id).orElseThrow(NotFoundException::new);
         return AccountResponseDto.from(account);
     }
 
+    @Transactional(readOnly = true)
     public List<AccountResponseDto> getByCustomerId(Long customerId) {
         List<Account> accounts = accountRepository.findByCustomerId(customerId);
         return accounts.stream().map(AccountResponseDto::from).toList();
     }
 
+    @Transactional(readOnly = true)
     public AccountResponseDto getByAccountNumber(String accountNumber) {
         Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(NotFoundException::new);
         return AccountResponseDto.from(account);

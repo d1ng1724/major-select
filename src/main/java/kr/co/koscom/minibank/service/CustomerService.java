@@ -33,7 +33,7 @@ public class CustomerService {
     }
 
     public List<CustomerResponseDto> getAll() {
-        List<Customer> customers = customerRepository.findAll();
+        List<Customer> customers = customerRepository.findAllWithAccounts();
         return customers.stream().map(CustomerResponseDto::from).toList();
     }
 

@@ -6,6 +6,7 @@ import kr.co.koscom.minibank.domain.TransactionType;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,6 +20,7 @@ public class TransactionHistoryResponseDto {
     private BigDecimal balanceAfter;
     private BigDecimal amount;
     private TransactionType type;
+    private LocalDateTime transactionAt;
 
     public static TransactionHistoryResponseDto from(TransactionHistory transactionHistory) {
         return TransactionHistoryResponseDto.builder()
@@ -28,6 +30,7 @@ public class TransactionHistoryResponseDto {
                 .balanceAfter(transactionHistory.getBalanceAfter())
                 .amount(transactionHistory.getAmount())
                 .type(transactionHistory.getType())
+                .transactionAt(transactionHistory.getTransactedAt())
                 .build();
     }
 }

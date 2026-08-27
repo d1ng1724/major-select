@@ -19,7 +19,7 @@ public class Account {
     private Long id;
     private String accountNumber;
 
-    @ManyToOne() // @ManyToOne, @OneToOne - Default FetchType.EAGER
+    @ManyToOne(fetch = FetchType.LAZY) // @ManyToOne, @OneToOne - Default FetchType.EAGER
     @JoinColumn(name = "customer_id")
     private Customer customer;
 

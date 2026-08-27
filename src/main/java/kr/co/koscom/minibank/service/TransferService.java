@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +57,11 @@ public class TransferService {
                 .toHistory(TransactionHistoryResponseDto.from(savedToHistory))
                 .transferredAt(savedFromHistory.getTransactedAt())
                 .build();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<TransactionHistoryResponseDto> getHistoriesByAccountId(Long id) {
+        List<TransactionHistory> histories = transactionHistoryRepository.findByAccountIdOrderByTransactedAtDesc(id);
+        return histories.stream().map(TransactionHistoryResponseDto::from).toList();
     }
 }
