@@ -1,0 +1,43 @@
+package kr.gsm.minibank.controller;
+
+import jakarta.validation.Valid;
+import kr.gsm.minibank.dto.AccountCreateRequestDto;
+import kr.gsm.minibank.dto.AccountResponseDto;
+import kr.gsm.minibank.service.AccountService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/accounts")
+@RequiredArgsConstructor
+public class AccountController {
+
+    private final AccountService accountService;
+
+    @PostMapping("")
+    public ResponseEntity<AccountResponseDto> createAccount(@Valid @RequestBody AccountCreateRequestDto accountCreateRequestDto) {
+        AccountResponseDto result = accountService.createAccount(accountCreateRequestDto);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<AccountResponseDto>> getAll() {
+        List<AccountResponseDto> result = accountService.getAll();
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AccountResponseDto> getAccountById(@PathVariable Long id) {
+        AccountResponseDto result = accountService.getById(id);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/customers/{id}")
+    public ResponseEntity<List<AccountResponseDto>> getAccountByCustomerId(@PathVariable Long id) {
+        List<AccountResponseDto> result = accountService.getByCustomerId(id);
+        return ResponseEntity.ok(result);
+    }
+}
