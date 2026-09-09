@@ -54,11 +54,13 @@ class TransferServiceTest {
                 .phone("010-2222-2222")
                 .build();
         Account from = Account.builder()
+                .id(1L)
                 .accountNumber("110-1111-1111")
                 .balance(new BigDecimal("50000"))
                 .customer(fromCustomer)
                 .build();
         Account to = Account.builder()
+                .id(2L)
                 .accountNumber("110-2222-2222")
                 .balance(new BigDecimal("0"))
                 .customer(toCustomer)
@@ -82,6 +84,8 @@ class TransferServiceTest {
 
         given(accountRepository.findByAccountNumber("110-1111-1111")).willReturn(Optional.of(from));
         given(accountRepository.findByAccountNumber("110-2222-2222")).willReturn(Optional.of(to));
+        // 일일 한도 검사(validateDailyLimit)가 출금 계좌를 다시 조회합니다.
+        given(accountRepository.findById(1L)).willReturn(Optional.of(from));
 
         given(transactionHistoryRepository.save(any(TransactionHistory.class))).willReturn(fromHistory, toHistory);
 
@@ -104,16 +108,20 @@ class TransferServiceTest {
     void 잔액이_부족하면_InsufficientBalanceException이_발생한다() {
         // given (출금 계좌에 1,000원밖에 없는 상황)
         Account from = Account.builder()
+                .id(1L)
                 .accountNumber("110-1111-1111")
                 .balance(new BigDecimal("1000"))
                 .build();
         Account to = Account.builder()
+                .id(2L)
                 .accountNumber("110-2222-2222")
                 .balance(new BigDecimal("0"))
                 .build();
 
         given(accountRepository.findByAccountNumber("110-1111-1111")).willReturn(Optional.of(from));
         given(accountRepository.findByAccountNumber("110-2222-2222")).willReturn(Optional.of(to));
+        // 일일 한도 검사(validateDailyLimit)가 출금 계좌를 다시 조회합니다.
+        given(accountRepository.findById(1L)).willReturn(Optional.of(from));
 
         TransferRequestDto request = new TransferRequestDto();
         request.setFromAccountNumber("110-1111-1111");
