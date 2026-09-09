@@ -1,7 +1,6 @@
-package kr.gsm.koscom.minibank.controller;
+package kr.gsm.minibank.controller;
 
 
-import kr.gsm.minibank.controller.AccountController;
 import kr.gsm.minibank.dto.AccountCreateRequestDto;
 import kr.gsm.minibank.dto.AccountResponseDto;
 import kr.gsm.minibank.service.AccountService;

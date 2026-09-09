@@ -1,4 +1,4 @@
-package kr.gsm.koscom.minibank.service;
+package kr.gsm.minibank.service;
 
 import kr.gsm.minibank.domain.Account;
 import kr.gsm.minibank.domain.Customer;
@@ -9,8 +9,6 @@ import kr.gsm.minibank.exception.InsufficientBalanceException;
 import kr.gsm.minibank.repository.AccountRepository;
 import kr.gsm.minibank.repository.CustomerRepository;
 import kr.gsm.minibank.repository.TransactionHistoryRepository;
-import kr.gsm.minibank.service.AccountService;
-import kr.gsm.minibank.service.TransferService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

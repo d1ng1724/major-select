@@ -1,4 +1,4 @@
-package kr.gsm.koscom.minibank;
+package kr.gsm.minibank;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
